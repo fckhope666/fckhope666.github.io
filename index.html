@@ -83,14 +83,14 @@
                         alert("Passkeys is supported")
                         createPasskey.classList.remove('hidden');
                     } else {
-                        alert("This device does not support passkeys.")
+                        alert("x1: This device does not support passkeys. ")
                     }
                 } catch (e) {
-                    alert("This device does not support passkeys.")
+                    alert("x2: This device does not support passkeys.")
                     console.error(e);
                 }
             } else {
-                alert("This device does not support passkeys.")
+                alert("x3: This device does not support passkeys.")
             }
 
             const form = $('#form');
