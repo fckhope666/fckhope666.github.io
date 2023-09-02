@@ -71,6 +71,27 @@
                 loading
             } from './public/client.js';
             new mdc.textField.MDCTextField($('.mdc-text-field'));
+            if (window.PublicKeyCredential &&
+                PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable &&
+                PublicKeyCredential.isConditionalMediationAvailable) {
+                try {
+                    const results = await Promise.all([
+                        PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(),
+                        PublicKeyCredential.isConditionalMediationAvailable()
+                    ]);
+                    if (results.every(r => r === true)) {
+                        alert("Passkeys is supported")
+                        createPasskey.classList.remove('hidden');
+                    } else {
+                        alert("This device does not support passkeys.")
+                    }
+                } catch (e) {
+                    alert("This device does not support passkeys.")
+                    console.error(e);
+                }
+            } else {
+                alert("This device does not support passkeys.")
+            }
 
             const form = $('#form');
             form.addEventListener('submit', async s => {

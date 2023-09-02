@@ -17,8 +17,8 @@
 export const $ = document.querySelector.bind(document);
 
 export async function _fetch(path, payload = '') {
-    // const newPath = path.replace('http://127.0.0.1:5500', 'http://192.168.1.3:8080');
-    const newPath = path.replace('http://192.168.1.3:5500', 'http://192.168.1.3:8080');
+    const newPath = path.replace('http://127.0.0.1:5500', 'http://192.168.1.3:8080');
+    // const newPath = path.replace('http://192.168.1.3:5500', 'http://192.168.1.3:8080');
     const headers = {
         'X-Requested-With': 'XMLHttpRequest',
     };
