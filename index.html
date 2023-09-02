@@ -1,0 +1,109 @@
+<!--
+ Copyright 2023 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Amsign</title>
+    <meta name="description" content="{{title}}">
+    <link id="favicon" rel="icon"
+        href="https://cdn.glitch.global/030c11e1-bda0-421f-b6eb-22ee1f359e54/favicon.svg?v=1677059219757"
+        type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./dist/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <script src="./public/component.js"></script>
+</head>
+
+<body class="mdc-typography">
+
+    <mwc-linear-progress id="progress"></mwc-linear-progress>
+    <main class="content center">
+        <h2>
+            Enter a username
+        </h2>
+        <form id="form" method="POST" action="/auth/register" class="center">
+            <div class="mdc-text-field mdc-text-field--filled`  ">
+                <span class="mdc-text-field__ripple"></span>
+                <label class="mdc-floating-label" id="username-label"></label>
+                <input type="text" id="username" class="mdc-text-field__input" aria-labelledby="username-label"
+                    name="username" autocomplete="username" value="asd" autofocus />
+                <span class="mdc-line-ripple"></span>
+            </div>
+            <div class="mdc-text-field mdc-text-field--filled">
+                <span class="mdc-text-field__ripple"></span>
+                <label class="mdc-floating-label" id="email-label"></label>
+                <input type="email" class="mdc-text-field__input" aria-labelledby="email-label" name="email"
+                    autocomplete="email" autofocus value="asd@gmail.com" />
+                <span class="mdc-line-ripple"></span>
+            </div>
+            <div class="mdc-text-field mdc-text-field--filled">
+                <span class="mdc-text-field__ripple"></span>
+                <label class="mdc-floating-label" id="password-label"></label>
+                <input type="password" class="mdc-text-field__input" aria-labelledby="password-label" name="password"
+                    autocomplete="current-password" autofocus value="asd" />
+                <span class="mdc-line-ripple"></span>
+            </div>
+            <p class="instructions">Any username can be accepted.</p>
+            <input type="submit" class="mdc-button mdc-button--raised" value="Next" />
+        </form>
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <script type="module">
+            import {
+                $,
+                _fetch,
+                loading
+            } from './public/client.js';
+            new mdc.textField.MDCTextField($('.mdc-text-field'));
+
+            const form = $('#form');
+            form.addEventListener('submit', async s => {
+                s.preventDefault();
+                const form = new FormData(s.target);
+                const cred = {};
+                form.forEach((v, k) => cred[k] = v);
+                _fetch(s.target.action, cred)
+                    .then(user => {
+                        if (user.status == 200) {
+                            localStorage.setItem("user", JSON.stringify(user.data))
+                            location.href = 'home.html';
+                        } else {
+                            alert(user.message);
+                        }
+                    }).catch(e => {
+                        loading.stop();
+                        console.error(e.message);
+                        alert(e);
+                    });
+            });
+            async function checkIfLogin() {
+                const res = await localStorage.getItem("user")
+                const user = JSON.parse(res)
+                if (user) {
+                    location.href = 'home.html';
+                }
+            }
+
+        // TODO: Add passkeys to the browser autofill: Detect features, invoke WebAuthn, and enable a conditional UI.
+
+        </script>
+    </main>
+</body>
+
+</html>
